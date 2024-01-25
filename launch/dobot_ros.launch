@@ -1,0 +1,7 @@
+<launch>
+  <!-- Launch the camera node -->
+  <node name="camera_node" pkg="dobot_ros" type="camera.py" output="screen" />
+
+  <!-- Launch the undistort node -->
+  <node name="undistort_node" pkg="dobot_ros" type="undistort.py" output="screen" />
+</launch>
