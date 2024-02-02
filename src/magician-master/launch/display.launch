@@ -19,7 +19,9 @@
   <node
     name="robot_state_publisher"
     pkg="robot_state_publisher"
-    type="state_publisher" />
+    type="robot_state_publisher" /> 
+    <!-- changed type from "state_publisher" to "robot_state_publisher" 
+     otherwiise have ERROR on: cannot locate node-->
   <node
     name="rviz"
     pkg="rviz"
