@@ -269,7 +269,7 @@ class JointStatePublisherGui(wx.Frame):
                 continue
 
 
-            row = wx.GridSizer(1,2)
+            row = wx.GridSizer(1,2,1,1)
             label = wx.StaticText(panel, -1, name)
             label.SetFont(font)
             row.Add(label, 1, wx.ALIGN_CENTER_VERTICAL)
