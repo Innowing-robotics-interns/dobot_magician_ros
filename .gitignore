@@ -1,3 +1,4 @@
 .vscode
 build
 devel
+src/magician_control/src/pydobot/__pycache__
