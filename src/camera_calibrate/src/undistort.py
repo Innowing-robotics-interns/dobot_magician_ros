@@ -19,7 +19,7 @@ class ImageUndistorter:
         self.undistorted_image_publisher = rospy.Publisher('/camera/image_undistorted', Image, queue_size=10)
 
     def load_camera_calibration(self):
-        with open('./camera_calibration.yaml', 'r') as f:
+        with open('/home/dethcube/Documents/Code/dobot/catkin_ws/dobot_ros/src/camera_calibrate/src/camera_calibration.yaml', 'r') as f:
             calib_data = yaml.safe_load(f)
 
         self.camera_matrix = np.array(calib_data['camera_matrix']['data']).reshape(3, 3)
