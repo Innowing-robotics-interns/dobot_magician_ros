@@ -2,6 +2,7 @@
 
 import rospy
 from sensor_msgs.msg import JointState
+from geometry_msgs.msg import Pose
 from pydobot import Dobot
 from serial.tools import list_ports
 import numpy as np
@@ -13,6 +14,7 @@ previous_positions = [0, 0, 30, 0]
 
 def joint_states_callback(msg):
     global previous_positions
+    global pose_publisher
 
     positions = msg.position
 
@@ -25,6 +27,20 @@ def joint_states_callback(msg):
         return  # Skip printing and moving to the same position
 
     print("Joint target (in degrees):", positions[:4])
+    dobot_pose = arm.get_pose()
+    print(f"Current end effector pose: {dobot_pose}")
+
+    # Publish the end effector pose
+    pose_msg = Pose()
+    pose_msg.position.x = dobot_pose.position.x
+    pose_msg.position.y = dobot_pose.position.y
+    pose_msg.position.z = dobot_pose.position.z
+    # Default orientation, assuming no rotation information is available
+    pose_msg.orientation.x = 0
+    pose_msg.orientation.y = 0
+    pose_msg.orientation.z = 0
+    pose_msg.orientation.w = 1
+    pose_publisher.publish(pose_msg)
 
     arm.rotate_joint(positions[0], positions[1], 90 - positions[2], positions[3])
 
@@ -52,7 +68,6 @@ def joint_states_callback(msg):
     previous_positions = positions
     print()
 
-
 if __name__ == '__main__':
     rospy.init_node('joint_state_controller')
 
@@ -62,18 +77,21 @@ if __name__ == '__main__':
 
     # Select the first available port
     port = None
-    for port in available_ports:
-        if 'ttyACM' in port.device:
-            print(f"Selected port: {port.device}")
-            port = port.device
+    for port_info in available_ports:
+        if 'ttyACM' in port_info.device:
+            print(f"Selected port: {port_info.device}")
+            port = port_info.device
             break
     
-    global arm
+    if port is None:
+        raise IOError("No Dobot port found.")
+    
     arm = Dobot(port=port)
-
     arm.home()
+
+    # Publisher for the end effector pose
+    pose_publisher = rospy.Publisher('/end_effector_pose', Pose, queue_size=10)
 
     rospy.Subscriber('/joint_states', JointState, joint_states_callback)
 
     rospy.spin()
-

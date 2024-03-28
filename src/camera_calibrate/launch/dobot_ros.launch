@@ -5,6 +5,9 @@
   <!-- Launch the undistort node -->
   <node name="undistort_node" pkg="camera_calibrate" type="undistort.py" output="screen" />
 
-  <!-- Launch the B m atrix node -->
+  <!-- Launch the B matrix node -->
   <node name="b_matrix_node" pkg="camera_calibrate" type="b_matrix.py" output="screen" />
+
+  <!-- Launch the X matrix node -->
+  <node name="x_matrix_node" pkg="camera_calibrate" type="x_matrix.py" output="screen" />
 </launch>
