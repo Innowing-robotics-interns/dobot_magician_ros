@@ -11,6 +11,17 @@ PI = np.pi
 initial_positions = [0, 0, 30, 0]
 previous_positions = [0, 0, 30, 0]
 
+# def print_pose(pose):
+#     # device.get_pose().joints
+#     # only print when pose changes
+#     alarms = arm.get_alarms()
+#     new_pose = arm.get_pose().joints
+#     if pose != new_pose:
+#         print(pose)
+#         if alarms != set():
+#             print(alarms)
+#         pose = new_pose
+
 def joint_states_callback(msg):
     global previous_positions
 
@@ -50,6 +61,9 @@ def joint_states_callback(msg):
 
     print(f"The new pose of joint {positions} has no alarms")
     previous_positions = positions
+
+    print(f"Actual joint positions: {arm.get_pose().joints[:4]}")
+
     print()
 
 
@@ -72,6 +86,9 @@ if __name__ == '__main__':
     arm = Dobot(port=port)
 
     arm.home()
+ 
+    # original_pose = arm.get_pose().joints
+    # print_pose(original_pose)
 
     rospy.Subscriber('/joint_states', JointState, joint_states_callback)
 
