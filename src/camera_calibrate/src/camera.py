@@ -36,6 +36,6 @@ def publish_video_stream(camera_model, topic_name):
     rospy.signal_shutdown('Video stream publishing finished')
 
 if __name__ == '__main__':
-    camera_model = 8  # Replace with the appropriate camera model number
+    camera_model = 2  # Replace with the appropriate camera model number
     topic_name = '/camera/image_raw'  # Replace with the desired image topic name
     publish_video_stream(camera_model, topic_name)
