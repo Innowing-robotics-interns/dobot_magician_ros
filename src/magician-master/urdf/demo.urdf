@@ -40,7 +40,7 @@
 
     <link name="link_1">
         <visual>
-            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <origin xyz="0 0 0" rpy="0 0 1.570796325"/>
             <geometry>
                 <mesh filename="package://magician/meshes/link_1.dae"/>
             </geometry>
@@ -56,7 +56,8 @@
 
     
     <joint name="joint_2" type="revolute">
-        <origin xyz="-0.01175 0 0.114" rpy="1.570796325 0 -1.570796325"/>
+        <!-- <origin xyz="-0.01175 0 0.114" rpy="1.570796325 0 0"/> -->
+        <origin xyz="-0.01175 0 0.114" rpy="1.570796325 -0.2 0"/>
         <parent link="link_1"/>
         <child link="link_2"/>
         <axis xyz="0 0 1"/>
@@ -134,7 +135,8 @@
     -->
 
     <joint name="joint_5" type ="revolute">
-        <origin xyz="0.02699 0.13228 -0.01175" rpy="0 3.14159265 0"/>
+        <!-- <origin xyz="0.02699 0.13228 -0.01175" rpy="0 3.14159265 0"/> -->
+        <origin xyz="0.02699 0.13228 -0.01175" rpy="0 3.14159265 0.4"/>
         <parent link="link_2"/>
         <child link="link_5"/>
         <axis xyz="0 0 1"/>
