@@ -24,7 +24,7 @@ class JointStateFeedbackNode:
                 joint_state_msg.header.stamp = rospy.Time.now()
                 joint_state_msg.name = ['joint_1', 'joint_2', 'joint_5', 'joint_6', 'joint_7']  # Replace with your joint names
 
-                joint_state_msg.position = [math.radians(pose.j1), math.radians(pose.j2), math.radians(90 - pose.j3), math.radians(pose.j4), 0]  # Replace with actual joint positions
+                joint_state_msg.position = [math.radians(pose.j1), math.radians(pose.j2), math.radians(90 - pose.j3 + pose.j2), math.radians(pose.j4), 0]  # Replace with actual joint positions
                 joint_state_msg.velocity = []  # Replace with actual joint velocities
                 joint_state_msg.effort = []  # Replace with actual joint efforts
 

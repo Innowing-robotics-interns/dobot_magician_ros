@@ -53,7 +53,7 @@ def joint_states_callback(msg):
     pose_msg.orientation.w = 1
     pose_publisher.publish(pose_msg)
 
-    arm.rotate_joint(positions[0], positions[1], 90 - positions[2], positions[3])
+    arm.rotate_joint(positions[0], positions[1], 90 - (positions[2]-positions[1]), positions[3])
 
     rospy.sleep(1.5)  # Wait for the arm to move
 
