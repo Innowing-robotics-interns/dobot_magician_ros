@@ -3,3 +3,4 @@ build
 devel
 test
 src/magician_control/src/pydobot/__pycache__
+src/camera_calibrate/src/__pycache__

@@ -11,6 +11,7 @@
     name="use_gui"
     value="$(arg gui)" />
 
+  <!-- Choose either 1 slidebar GUI -->
   <!-- <node
     name="joint_state_publisher_gui"
     pkg="joint_state_publisher_gui"
@@ -26,6 +27,17 @@
     type="robot_state_publisher" /> 
     <!-- changed type from "state_publisher" to "robot_state_publisher" 
      otherwiise have ERROR on: cannot locate node-->
+
+  <!-- display a plane in rviz for click and go --> 
+  <node name="plane_marker_node"
+    pkg="magician"
+    type="plane_marker.py"
+    output="screen"/> 
+  <node name="click_coordinate_node"
+    pkg="magician"
+    type="click_coord_publisher.py"  
+    output="screen"/> 
+
   <node
     name="rviz"
     pkg="rviz"

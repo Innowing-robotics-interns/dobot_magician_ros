@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+#############################################################################
+# This node is for mapping the real joint states to the rviz simulation.
+#############################################################################
+
 import rospy
 from sensor_msgs.msg import JointState
 import math
@@ -16,20 +20,22 @@ class JointStateFeedbackNode:
 
     def publish_joint_states(self):
         while not rospy.is_shutdown():
-            pose = arm.get_pose().joints
+            pose = arm.get_pose()
+
+            print(f"Current end effector pose: {pose}")
 
             # Check if joint positions have changed
-            if self.prev_joint_positions is None or self._has_joint_changed(pose):
+            if self.prev_joint_positions is None or self._has_joint_changed(pose.joints):
                 joint_state_msg = JointState()
                 joint_state_msg.header.stamp = rospy.Time.now()
                 joint_state_msg.name = ['joint_1', 'joint_2', 'joint_5', 'joint_6', 'joint_7']  # Replace with your joint names
 
-                joint_state_msg.position = [math.radians(pose.j1), math.radians(pose.j2), math.radians(90 - pose.j3 + pose.j2), math.radians(pose.j4), 0]  # Replace with actual joint positions
+                joint_state_msg.position = [math.radians(pose.joints.j1), math.radians(pose.joints.j2), math.radians(90 - pose.joints.j3 + pose.joints.j2), math.radians(pose.joints.j4), 0]  # Replace with actual joint positions
                 joint_state_msg.velocity = []  # Replace with actual joint velocities
                 joint_state_msg.effort = []  # Replace with actual joint efforts
 
                 self.joint_pub.publish(joint_state_msg)
-                self.prev_joint_positions = pose
+                self.prev_joint_positions = pose.joints
 
             self.rate.sleep()
 

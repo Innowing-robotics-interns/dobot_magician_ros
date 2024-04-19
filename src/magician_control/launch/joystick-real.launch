@@ -5,8 +5,8 @@
   </node>
 
   <node name="joystick_control" pkg="magician_control" type="joystick_control.py" output="screen">
-    <param name="sensitivity" value="0.1"/>
+    <param name="sensitivity" value="3.5"/>
   </node>
 
-  <node name="joystick_sim_control" pkg="magician_control" type="joystick_sim_control.py" output="screen"/>
+  <node name="general_control" pkg="magician_control" type="general_control.py" output="screen"/>
 </launch>

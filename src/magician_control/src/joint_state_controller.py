@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+#######################################################################################################################
+# This node is for controlling the robot arm's joint states (real).
+# It needs to be run along with the slider bar control using joint_state_publisher_gui, enable it in display.launch.
+#######################################################################################################################
+
 import rospy
 from sensor_msgs.msg import JointState
 from geometry_msgs.msg import Pose

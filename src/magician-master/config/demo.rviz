@@ -9,6 +9,7 @@ Panels:
         - /Grid1
         - /RobotModel1
         - /TF1
+        - /Markers
       Splitter Ratio: 0.5
     Tree Height: 747
   - Class: rviz/Selection
@@ -106,6 +107,10 @@ Visualization Manager:
         {}
       Update Interval: 0
       Value: false
+    - Class: rviz/Marker  #
+      Enabled: true
+      Marker Topic: /plane_marker
+      Name: Markers
   Enabled: true
   Global Options:
     Background Color: 170; 170; 170
@@ -115,7 +120,7 @@ Visualization Manager:
   Name: root
   Tools:
     - Class: rviz/Interact
-      Hide Inactive Objects: true
+      Hide Inactive Objects: false
     - Class: rviz/MoveCamera
     - Class: rviz/Select
     - Class: rviz/FocusCamera
@@ -125,31 +130,32 @@ Visualization Manager:
     - Class: rviz/SetGoal
       Topic: /move_base_simple/goal
     - Class: rviz/PublishPoint
-      Single click: true
+      Single click: false # enable multiple clicks
       Topic: /clicked_point
+      Name: Publish Point
   Value: true
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.03231585
+      Distance: 0.8
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.0057233246
-        Y: -0.00970380474
-        Z: 0.140018553
+        X: -0.045
+        Y: 0.03
+        Z: 0.13
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.1647975
+      Pitch: 0.31
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.34674954
+      Yaw: 4.08
     Saved: ~
 Window Geometry:
   Displays:

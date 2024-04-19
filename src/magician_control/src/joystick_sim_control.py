@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+############################################################################
+# This node is for controlling the robot arm's joint states (sim) using
+# a mapping from the /end_effector_coord Twist message to joint positions.
+############################################################################
+
 import rospy
 from sensor_msgs.msg import JointState
 from geometry_msgs.msg import Twist
@@ -43,8 +48,7 @@ def publish_joint_states():
             joint_pub.publish(joint_state_msg)
 
             # Print the pose in 4 decimal places
-            # print(f"Joint target (in radians): {[round(x, 4) for x in joint_state_msg.position]}")
-            print(f"Joint target (in degrees): {[round(x * 180 / 3.14159265359, 4) for x in joint_state_msg.position]}")
+            rospy.loginfo(f"Joint target (deg): {[round((x * 180 / 3.14159265359)%360, 4) for x in joint_state_msg.position]}")
 
             prev_joint_positions = pose
             
@@ -53,10 +57,11 @@ def publish_joint_states():
 
 def move_robot_callback(msg):
     global pose
-    pose = [msg.angular.z, -msg.linear.z, msg.linear.y, 0, 0]
-    # print(pose)
+    pose = [msg.angular.z, msg.linear.z, msg.linear.x, 0, 0]
 
 if __name__ == '__main__':
     rospy.init_node('joystick_sim_control_node', anonymous=True)
+
+    # Note: The /end_effector_coord topic is interpreted as joint angles in this sim!
     rospy.Subscriber('/end_effector_coord', Twist, move_robot_callback)
     publish_joint_states()
