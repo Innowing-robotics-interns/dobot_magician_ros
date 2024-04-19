@@ -16,9 +16,9 @@
     pkg="joint_state_publisher_gui"
     type="joint_state_publisher_gui" /> -->
   <!-- <node
-    name="magician_fake_joint_state_publisher"
+    name="slidebar_sim_joint_state"
     pkg="magician"
-    type="magician_fake_joint_state_publisher" /> -->
+    type="slidebar_sim_joint_state.py" /> -->
 
   <node
     name="robot_state_publisher"

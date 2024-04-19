@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+########################################################################################
+# This node shows a slidebar GUI for controlling the robot arm's joint states (sim).
+########################################################################################
+
+
 import rospy
 import random
 import wx
