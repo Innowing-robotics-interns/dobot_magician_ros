@@ -187,7 +187,8 @@
 
     <!--dummy joint-->
     <joint name="joint_7" type ="revolute">
-        <origin xyz="-0.0328 0.02871 0" rpy="0 3.14159265 0"/>
+        <!-- <origin xyz="-0.0328 0.02871 0" rpy="0 3.14159265 0"/> -->
+        <origin xyz="-0.0328 0.02871 0" rpy="0 3.14159265 -2.6"/>
         <parent link="link_6"/>
         <child link="link_7"/>
         <axis xyz="0 0 1"/>

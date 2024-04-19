@@ -87,6 +87,10 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        link_7:
+          Alpha: 0
+          Show Axes: false
+          Show Trail: false
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
@@ -95,7 +99,7 @@ Visualization Manager:
       Visual Enabled: true
     - Class: rviz/TF
       Enabled: true
-      Frame Timeout: 15
+      Frame Timeout: 900
       Frames:
         All Enabled: true
       Marker Scale: 0.400000006

@@ -57,7 +57,10 @@ def publish_joint_states():
 
 def move_robot_callback(msg):
     global pose
+    # pose = [msg.angular.z, msg.linear.z, msg.linear.x, msg.linear.y, 0]
     pose = [msg.angular.z, msg.linear.z, msg.linear.x, 0, 0]
+    # pose[3] = 1.570796325 - (1.570796325 - (pose[2] - pose[1])) - 1.570796325/2 + 0.185
+    pose[3] = (pose[2] - pose[1]) - 1.570796325/2 + 0.185   # 1.85 is just a constant offset (can tune)
 
 if __name__ == '__main__':
     rospy.init_node('joystick_sim_control_node', anonymous=True)
