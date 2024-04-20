@@ -24,6 +24,7 @@ roslaunch magician_control joystick-real.launch
 - The simulation robot arm will be in sync with the real robot arm (two-way joint state communication).
 
 ### Simulation - Joystick Control
+![rqt_joystick-sim](docs/images/rqt_joystick-sim.png)
 ```bash
 # Terminal 1
 roslaunch magician display.launch

@@ -75,6 +75,8 @@ def joystick_callback(data):
     
     settingsUpdated = False
 
+# Update the current actual coordinates, enable 
+# further incrementation of coordinate using joystick
 def coord_callback(data):
     global prev_x, prev_y, prev_z, prev_r
     prev_x = data.linear.x

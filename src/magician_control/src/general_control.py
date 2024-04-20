@@ -93,8 +93,10 @@ def publish_joint_states():
             joint_state_msg.position = [math.radians(pose.j1),
                                          math.radians(pose.j2),
                                          math.radians(90 - pose.j3 + pose.j2),
-                                         math.radians(pose.j4),
+                                        #  math.radians(pose.j4),
+                                         0,
                                          0]  # Replace with actual joint positions
+            joint_state_msg.position[3] = (joint_state_msg.position[2] - joint_state_msg.position[1]) - 1.570796325/2 + 0.185   # 1.85 is just a constant offset (can tune)
             joint_state_msg.velocity = []  # Replace with actual joint velocities
             joint_state_msg.effort = []  # Replace with actual joint efforts
 
