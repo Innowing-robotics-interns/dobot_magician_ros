@@ -9,6 +9,7 @@ Steps to run the package:
 3. Run `source devel/setup.bash` before running the following commands.
 
 ### Digital Twin
+![rqt_joystick-real](docs/images/rqt_joystick-real.png)
 ```bash
 # Terminal 1
 roslaunch magician display.launch

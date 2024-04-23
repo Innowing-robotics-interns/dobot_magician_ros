@@ -51,8 +51,8 @@ def publish_joint_states():
             arm.move_to(coord_command[0], coord_command[1], coord_command[2], coord_command[3])
         
         # Update the vacuum pump state
-        # arm.suck(vacuumPumpOn)      # for the suction cup
-        arm.grip(vacuumPumpOn)      # for the gripper
+        # arm.suck(bool(vacuumPumpOn))      # for the suction cup
+        arm.grip(bool(vacuumPumpOn))      # for the gripper
         
 
         alarms = arm.get_alarms()
