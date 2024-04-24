@@ -18,7 +18,7 @@ vacuumPumpOn = False
 
 def publish_joint_states():
     joint_pub = rospy.Publisher('/joint_states', JointState, queue_size=1)
-    coord_pub = rospy.Publisher('/end_effector_coord', Twist, queue_size=1)
+    # coord_pub = rospy.Publisher('/end_effector_coord', Twist, queue_size=1)
     rate = rospy.Rate(100)  # Set the publishing rate to 100 Hz
     prev_joint_positions = None
     global coord_command
@@ -49,44 +49,47 @@ def publish_joint_states():
             # print the pose in 2 decimal places
             rospy.loginfo(f"End effector target: {[round(x, 2) for x in coord_command]}")
             arm.move_to(coord_command[0], coord_command[1], coord_command[2], coord_command[3])
+            
+            alarms = arm.get_alarms()
+            # set a timeout for the alarms
+            timeout = 5
+            start_time = rospy.get_time()
+
+            # If have alarm and not timeout, reset to previous positions 
+            while len(alarms) != 0 and rospy.get_time() - start_time < timeout:
+                # arm.clear_alarms()
+                print(f"The new pose of coord {coord_command} has alarms: {alarms}")
+                print(f"Resetting the previous positions to {prev_command}")
+                arm.move_to(prev_command[0], prev_command[1], prev_command[2], prev_command[3])
+                # rospy.sleep(0.2)  # Wait for the arm to move
+                # arm.clear_alarms()
+                alarms = arm.get_alarms()
+            # If still have alarms after timeout, restore initial positions
+            if len(alarms) != 0:
+                arm.clear_alarms()
+                print(f"Restore initial coord: {initial_coord}")
+                arm.move_to(initial_coord[0], initial_coord[1], initial_coord[2], initial_coord[3])
+                alarms = arm.get_alarms()
+                coord_command = initial_coord
+
+            prev_command = coord_command
+        # else:
+            # rospy.loginfo(f"new coord vs prev coord: {coord_command} vs {prev_command}")
         
         # Update the vacuum pump state
         # arm.suck(bool(vacuumPumpOn))      # for the suction cup
         arm.grip(bool(vacuumPumpOn))      # for the gripper
         
-
-        alarms = arm.get_alarms()
-        # set a timeout for the alarms
-        timeout = 5
-        start_time = rospy.get_time()
-
-        # If have alarm and not timeout, reset to previous positions 
-        while len(alarms) != 0 and rospy.get_time() - start_time < timeout:
-            # arm.clear_alarms()
-            print(f"The new pose of coord {coord_command} has alarms: {alarms}")
-            print(f"Resetting the previous positions to {prev_command}")
-            arm.move_to(prev_command[0], prev_command[1], prev_command[2], prev_command[3])
-            # rospy.sleep(0.2)  # Wait for the arm to move
-            # arm.clear_alarms()
-            alarms = arm.get_alarms()
-        # If still have alarms after timeout, restore initial positions
-        if len(alarms) != 0:
-            arm.clear_alarms()
-            print(f"Restore initial coord: {initial_coord}")
-            arm.move_to(initial_coord[0], initial_coord[1], initial_coord[2], initial_coord[3])
-            alarms = arm.get_alarms()
-            coord_command = initial_coord
-
-        prev_command = coord_command
-        twist = Twist()
-        twist.linear.x, twist.linear.y, twist.linear.z, twist.angular.z = coord_command
-        twist.angular.x = vacuumPumpOn
-        coord_pub.publish(twist)
+        # Publish the coord command, because it maybe updated by other nodes
+        # twist = Twist()
+        # twist.linear.x, twist.linear.y, twist.linear.z, twist.angular.z = coord_command
+        # twist.angular.x = vacuumPumpOn
+        # coord_pub.publish(twist)
 
         pose = arm.get_pose().joints
-
         # Check if joint positions have changed
         if prev_joint_positions is None or has_joint_changed(pose):
+            # sim follows the real robot's joint states
             joint_state_msg = JointState()
             joint_state_msg.header.stamp = rospy.Time.now()
             joint_state_msg.name = ['joint_1', 'joint_2', 'joint_5', 'joint_6', 'joint_7']  # Replace with your joint names
@@ -140,7 +143,7 @@ if __name__ == '__main__':
 
     arm.suck(False)
     arm.grip(False)
-    arm.move_to(180.0, 0, 50, 0)
+    # arm.move_to(180.0, 0, 50, 0)
 
     arm.home()
 

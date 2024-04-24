@@ -1,6 +1,6 @@
 # DOBOT Magician ROS Controllers
 This is a digital twin ROS package for the DOBOT [Magician](https://www.dobot-robots.com/products/education/magician.html) robotic arm. It provides a simple interface to control the robot arm. The package has been tested with ROS Noetic on Ubuntu 20.04.
-
+![digital-twin_demo](docs/images/digital-twin_demo.gif)
 
 ## Usage
 Steps to run the package:
@@ -9,7 +9,8 @@ Steps to run the package:
 3. Run `source devel/setup.bash` before running the following commands.
 
 ### Digital Twin
-![rqt_joystick-real](docs/images/rqt_joystick-real.png)
+
+![rqt_joystick-real](docs/images/rqt_joystick-real_new.png)
 ```bash
 # Terminal 1
 roslaunch magician display.launch

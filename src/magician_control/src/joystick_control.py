@@ -13,13 +13,39 @@ prev_x, prev_y, prev_z, prev_r = initialCoordinates
 
 vacuumPumpOn = 0
 settingsUpdated = False
-timeout = 0.5
+button_timeout = 0.5
+change_timeout = 0.07
 
 prevTwist = Twist()
+twist = Twist()
+
+def publish_coord_cmd():
+    global prevTwist, twist
+    global change_start_time, change_timeout
+    global settingsUpdated
+    newTimerStarted = False
+    while not rospy.is_shutdown():
+        if settingsUpdated or newTimerStarted:
+            if rospy.get_time() - change_start_time > change_timeout:
+                print(f"Publishing new coordinates: {twist}")
+                pub.publish(twist)
+                prevTwist = twist
+                # settingsUpdated = False
+                change_start_time = rospy.get_time()
+                newTimerStarted = False
+            else:
+                if settingsUpdated == True:
+                    print("settings updated")
+                    change_start_time = rospy.get_time()
+                    newTimerStarted = True
+                    settingsUpdated = False
+                # else:
+                    # print(f"waiting for {change_timeout - (rospy.get_time() - change_start_time)} seconds")
+
 
 def joystick_callback(data):
-    global prev_x, prev_y, prev_z, prev_r, prevTwist, vacuumPumpOn, settingsUpdated
-    global start_time, timeout
+    global prev_x, prev_y, prev_z, prev_r, twist, vacuumPumpOn, settingsUpdated
+    global button_start_time, button_timeout
 
     x = data.axes[1]  # Horizontal movement (x-coordinate)
     y = data.axes[0]  # Vertical movement (y-coordinate)
@@ -32,9 +58,9 @@ def joystick_callback(data):
         settingsUpdated = True
 
     # print("time passed: ", rospy.get_time() - start_time)
-    if data.buttons[7] == 1 and rospy.get_time() - start_time > timeout:
+    if data.buttons[7] == 1 and rospy.get_time() - button_start_time > button_timeout:
         # can only click button <7> every <timeout> second
-        start_time = rospy.get_time()
+        button_start_time = rospy.get_time()
         print("clicked button 7")
         # flip the vacuum pump state
         vacuumPumpOn = not vacuumPumpOn
@@ -56,24 +82,20 @@ def joystick_callback(data):
     prev_z += z_change
     prev_r += r_change
 
+    if x_change != 0 or y_change != 0 or z_change != 0 or r_change != 0:
+        settingsUpdated = True
+
     # only publish if there is a change in the coordinates
-    if settingsUpdated or x_change != 0 or y_change != 0 or z_change != 0 or r_change != 0:
+    if settingsUpdated:
       # Create a Twist message
-      twist = Twist()
+    #   twist = Twist()
       twist.linear.x = prev_x
       twist.linear.y = prev_y
       twist.linear.z = prev_z
       twist.angular.z = prev_r
 
       twist.angular.x = vacuumPumpOn
-      
-      # Publish the Twist message
-      pub.publish(twist)
-      prevTwist = twist
-    # else:
-      # pub.publish(prevTwist)
-    
-    settingsUpdated = False
+      print(f"New coordinates: {twist}")
 
 # Update the current actual coordinates, enable 
 # further incrementation of coordinate using joystick
@@ -87,15 +109,18 @@ def coord_callback(data):
 if __name__ == '__main__':
     global pub
     global sensitivity
-    global start_time
+    global button_start_time
+    global change_start_time
     rospy.init_node('joystick_control_node')
     sensitivity = rospy.get_param('~sensitivity', 0.5)
 
     pub = rospy.Publisher('/end_effector_coord', Twist, queue_size=1)
+    change_start_time = rospy.get_time()
     rospy.Subscriber('/end_effector_coord', Twist, coord_callback)
 
-    start_time = rospy.get_time()
+    button_start_time = rospy.get_time()
     rospy.Subscriber('/joy', Joy, joystick_callback) #rosrun joy joy_node _dev:=/dev/input/js0 _autorepeat_rate:=15
+    publish_coord_cmd()
 
     # block until the node is shutdown
     rospy.spin()
